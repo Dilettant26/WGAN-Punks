@@ -4,7 +4,7 @@ from helper import *
 from preconfig import *
 
 #Train function
-def train(dataset, epochs, LastEpoch, type, generator, discriminator, g_optimizer, d_optimizer, checkpoint, checkpoint_prefix):
+def train(dataset, epochs, LastEpoch, checkpoint_epochs, type, generator, discriminator, g_optimizer, d_optimizer, checkpoint, checkpoint_prefix):
     
     # Number of images to generate every 100 epochs
     num_examples_to_generate = 64
@@ -27,7 +27,7 @@ def train(dataset, epochs, LastEpoch, type, generator, discriminator, g_optimize
 
     # Save the model and generate test images every 100 epochs
 
-        if (epoch + 1) % 100 == 0:
+        if (epoch + 1) % checkpoint_epochs == 0:
 
             checkpoint.save(file_prefix = checkpoint_prefix)
 
