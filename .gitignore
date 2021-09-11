@@ -1,0 +1,4 @@
+Input_images/punks/*
+model/punks/*
+Final_Images/*
+__pycache__
