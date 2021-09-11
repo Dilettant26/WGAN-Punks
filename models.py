@@ -55,7 +55,6 @@ def Discriminator():
     x = keras.layers.LeakyReLU(0.2)(x)
     #Final
     x = keras.layers.Conv2D(max_filter, conv_window, strides=1, padding='same', use_bias=True)(x)
-    x = keras.layers.LeakyReLU(0.2)(x)
     outputs = keras.layers.Dense(1)(x)
     
     return keras.Model(inputs=inputs, outputs=outputs, name='Discriminator')
