@@ -3,13 +3,13 @@ import datetime
 import tensorflow as tf
 
 # input dimension for Generator
-z_dim = 100
+z_dim = 128
 
 # Attributes of Input Images
 HEIGHT, WIDTH, CHANNEL = 32, 32, 3
 
 # Batch Size
-BATCH_SIZE = 128
+BATCH_SIZE = 64
 
 current_time = datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
 AUTOTUNE = tf.data.experimental.AUTOTUNE
@@ -25,5 +25,5 @@ learnRateG = 0.0001
 gradient_penalty_weight = 10.0
 
 #Filters for Models
-max_filter = 512
+max_filter = 256
 

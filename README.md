@@ -6,7 +6,7 @@ The original Cryptopunks were designed by [LarvaLabs](https://www.larvalabs.com/
 ## Introduction
 I used the project [TF2-WGAN](https://github.com/KUASWoodyLIN/TF2-WGAN) from [KUASWoodyLIN](https://github.com/KUASWoodyLIN) as base and adapted it for my personal needs. 
 
-This implies a different structure of the Generator and the Discriminator Networks. The Training of the WGAN is stable and results in good new images
+This implies a different structure of the Generator and Discriminator Networks. The Training of the WGAN is stable and results in good new Images
 
 ## Model
 The WGAN-model was trained on 10000 images of CryptoPunks. 
@@ -59,7 +59,7 @@ The structure of the Discriminator:
 ## Results
 After 5000 Epochs of Training
 
-<img src="./newImages/epoch5000.png" width="50%" height="50%"/>
+<img src="./newImages/epoch10000.png" width="50%" height="50%"/>
 
 
 ## Usage
@@ -67,7 +67,7 @@ After 5000 Epochs of Training
 
 2. Execute 
 ```bash
-    python .\main.py --epochs 5000 --check_epochs 100
+    python .\main.py --epochs 10000 --check_epochs 100
 ```
 
 ## Additional

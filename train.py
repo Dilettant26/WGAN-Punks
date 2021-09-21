@@ -2,6 +2,8 @@
 from models import *
 from helper import *
 from preconfig import *
+import math
+from PIL import Image
 
 #Train function
 def train(dataset, epochs, LastEpoch, checkpoint_epochs, type, generator, discriminator, g_optimizer, d_optimizer, checkpoint, checkpoint_prefix):
@@ -35,18 +37,35 @@ def train(dataset, epochs, LastEpoch, checkpoint_epochs, type, generator, discri
                 f.write('%d' % (epoch+1))
 
             sample_random_vector = tf.random.normal((num_examples_to_generate , 1, 1, z_dim))
-            generate_and_save_images(generator, epoch, sample_random_vector, type)
+            generate_and_save_images(generator, epoch, sample_random_vector, type, num_examples_to_generate )
       
         print ('Epoch {} '.format(epoch + 1))
 
 # Function for image creation from prediction of model
-def generate_and_save_images(model, epoch, test_input, type):
+def generate_and_save_images(generator, epoch, test_input, type, num_examples_to_generate):
 
-    predictions = model(test_input, training=False)
-    predictions = tf.math.round(predictions * 255)
-    predictions = tf.image.convert_image_dtype(predictions, dtype=tf.float64)
+    predictions = generator(test_input, training=False)
+    predictions = tf.cast(tf.round((predictions * 127.5) + 127.5), tf.uint8)
+    Images = [Image.fromarray(x) for x in predictions.numpy()]
 
-    save_images(predictions.numpy(), [8,8] ,'newImages/' + type + '/epoch' + str(epoch+1) + '.png')
+    DIMENSION = int(math.sqrt(num_examples_to_generate))
+
+    new_im = Image.new('RGB', (DIMENSION*WIDTH , DIMENSION*HEIGHT))
+
+    y_offset = 0
+    x_offset = 0
+
+    for im in Images:
+
+        new_im.paste(im, (x_offset, y_offset))
+        x_offset += WIDTH
+        
+        if x_offset >= ((WIDTH*DIMENSION)): 
+            x_offset = 0
+            y_offset += HEIGHT
+        
+
+    new_im.save('newImages/' + type + '/epoch' + str(epoch+1) + '.png')
 
 # Function for image creation after training loop has ended
 def generate_final( generator, num_examples_to_generate):
@@ -54,10 +73,10 @@ def generate_final( generator, num_examples_to_generate):
     sample_random_vector = tf.random.normal((num_examples_to_generate , 1, 1, z_dim))
 
     predictions = generator(sample_random_vector, training=False)
-    predictions = tf.math.round(predictions * 255)
-
-    predictions = tf.image.convert_image_dtype(predictions, dtype=tf.float64)
+    predictions = tf.make_ndarray(tf.make_tensor_proto(tf.cast(tf.round((predictions * 127.5) + 127.5), tf.uint8)))
 
     for idx,image in enumerate(predictions):
 
-        imageio.imwrite("Final_Images/Image_" + str(idx) + ".png", image.numpy())
+        Img = Image.fromarray(image)
+
+        Img.save("Final_Images/Image_" + str(idx) + ".png")
