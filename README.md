@@ -56,7 +56,7 @@ The structure of the Discriminator:
 ## Results
 After 15000 Epochs of Training
 
-<img src="./newImages/epoch15000.png" width="50%" height="50%"/>
+<img src="newImages/punks/epoch15000.png" width="50%" height="50%"/>
 
 
 ## Usage
