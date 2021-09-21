@@ -15,11 +15,9 @@ The structure of the Generator:
 
 ```python
     inputs = keras.Input(shape=(1, 1, z_dim))
-    x = keras.layers.Dense(4 * 4 * max_filter, use_bias=False)(inputs)
-    x = keras.layers.BatchNormalization()(x)
-    x = keras.layers.LeakyReLU(0.2)(x)
+    x = keras.layers.Dense(4 * 4 * max_filter*2, use_bias=False)(inputs)
     # 1x1 -> 4x4
-    x = keras.layers.Reshape((4, 4, max_filter))(x)
+    x = keras.layers.Reshape((4, 4, max_filter*2))(x)
     x = keras.layers.Conv2DTranspose(max_filter, conv_window, strides=1, padding='same', use_bias=False)(x)
     x = keras.layers.BatchNormalization()(x)
     x = keras.layers.LeakyReLU(0.2)(x)
@@ -41,25 +39,24 @@ The structure of the Discriminator:
 ```python
     inputs = keras.Input(shape=(HEIGHT, WIDTH, CHANNEL))
     # 32x32 -> 16x16
-    x = keras.layers.Conv2D(max_filter/16, conv_window, strides=2, padding='same', use_bias=True)(inputs)
+    x = keras.layers.Conv2D(max_filter/8, conv_window, strides=2, padding='same', use_bias=True)(inputs)
     x = keras.layers.LeakyReLU(0.2)(x)
     # 16x16 -> 8x8
-    x = keras.layers.Conv2D(max_filter/8, conv_window, strides=2, padding='same', use_bias=True)(x)
-    x = keras.layers.LeakyReLU(0.2)(x)
-    # 8x8 -> 4x4
     x = keras.layers.Conv2D(max_filter/4, conv_window, strides=2, padding='same', use_bias=True)(x)
     x = keras.layers.LeakyReLU(0.2)(x)
-    # 4x4 -> 1x1
+    # 8x8 -> 4x4
     x = keras.layers.Conv2D(max_filter/2, conv_window, strides=2, padding='same', use_bias=True)(x)
     x = keras.layers.LeakyReLU(0.2)(x)
     #Final
-    x = keras.layers.Conv2D(max_filter, conv_window, strides=1, padding='same', use_bias=True)(x)
+    x = keras.layers.Conv2D(max_filter, conv_window, strides=1, padding='valid', use_bias=True)(x)
+    x = keras.layers.LeakyReLU(0.2)(x)
+    x = keras.layers.Flatten()(x)
     outputs = keras.layers.Dense(1)(x)
 ```
 ## Results
-After 5000 Epochs of Training
+After 15000 Epochs of Training
 
-<img src="./newImages/epoch10000.png" width="50%" height="50%"/>
+<img src="./newImages/epoch15000.png" width="50%" height="50%"/>
 
 
 ## Usage

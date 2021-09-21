@@ -24,6 +24,8 @@ learnRateG = 0.0001
 # Gradient penalty weight
 gradient_penalty_weight = 10.0
 
-#Filters for Models
+#Filters and ConvWindow for Models
 max_filter = 256
+conv_window = 4
+
 

@@ -6,8 +6,6 @@ from functools import partial
 from utils.losses import generator_loss, discriminator_loss, gradient_penalty
 
 
-conv_window = 4
-
 #===========Generator Model============
 
 def Generator():
