@@ -30,7 +30,7 @@ def configure_for_performance(ds, augment):
     ds = ds.batch(BATCH_SIZE, drop_remainder=True)
     if(augment):
         ds = ds.map(lambda x: augmentFunc(x), num_parallel_calls=AUTOTUNE)
-    ds = ds.prefetch(buffer_size=AUTOTUNE)
+    #ds = ds.prefetch(buffer_size=AUTOTUNE)
     return ds
 
 #------Augmentation if Necessary-----

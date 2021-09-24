@@ -36,7 +36,7 @@ def train(dataset, epochs, LastEpoch, checkpoint_epochs, type, generator, discri
             with open('model/' + type + '/Curr_Epoch.txt', 'w') as f:
                 f.write('%d' % (epoch+1))
 
-            sample_random_vector = tf.random.normal((num_examples_to_generate , 1, 1, z_dim))
+            sample_random_vector = tf.random.normal((num_examples_to_generate , z_dim))
             generate_and_save_images(generator, epoch, sample_random_vector, type, num_examples_to_generate )
       
         print ('Epoch {} '.format(epoch + 1))
@@ -70,12 +70,14 @@ def generate_and_save_images(generator, epoch, test_input, type, num_examples_to
 # Function for image creation after training loop has ended
 def generate_final( generator, num_examples_to_generate):
     
-    sample_random_vector = tf.random.normal((num_examples_to_generate , 1, 1, z_dim))
+    sample_random_vector = tf.random.normal((num_examples_to_generate , z_dim))
 
     predictions = generator(sample_random_vector, training=False)
-    predictions = tf.make_ndarray(tf.make_tensor_proto(tf.cast(tf.round((predictions * 127.5) + 127.5), tf.uint8)))
+    predictions = tf.cast(tf.round((predictions * 127.5) + 127.5), tf.uint8)
+    predictions = tf.image.resize(predictions, [512, 512], method='nearest')
 
-    for idx,image in enumerate(predictions):
+
+    for idx,image in enumerate(predictions.numpy()):
 
         Img = Image.fromarray(image)
 
