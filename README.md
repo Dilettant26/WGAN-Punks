@@ -14,23 +14,23 @@ The WGAN-model was trained on 10000 images of CryptoPunks.
 The structure of the Generator:
 
 ```python
-    inputs = keras.Input(shape=(1, 1, z_dim))
+   inputs = keras.Input(shape=(z_dim))
     x = keras.layers.Dense(4 * 4 * max_filter*2, use_bias=False)(inputs)
-    # 1x1 -> 4x4
+    # 1x1 -> 8x8
     x = keras.layers.Reshape((4, 4, max_filter*2))(x)
-    x = keras.layers.Conv2DTranspose(max_filter, conv_window, strides=1, padding='same', use_bias=False)(x)
-    x = keras.layers.BatchNormalization()(x)
-    x = keras.layers.LeakyReLU(0.2)(x)
-    # 4x4 -> 8x8
-    x = keras.layers.Conv2DTranspose(max_filter/2, conv_window, strides=2, padding='same', use_bias=False)(x)
+    x = keras.layers.Conv2DTranspose(max_filter, conv_window, strides=2, padding='same', use_bias=False)(x)
     x = keras.layers.BatchNormalization()(x)
     x = keras.layers.LeakyReLU(0.2)(x)
     # 8x8 -> 16x16
-    x = keras.layers.Conv2DTranspose(max_filter/4, conv_window, strides=2, padding='same', use_bias=False)(x)
+    x = keras.layers.Conv2DTranspose(max_filter/2, conv_window, strides=2, padding='same', use_bias=False)(x)
     x = keras.layers.BatchNormalization()(x)
     x = keras.layers.LeakyReLU(0.2)(x)
     # 16x16 -> 32x32
-    x = keras.layers.Conv2DTranspose(3, conv_window, strides=2, padding='same', use_bias=False)(x)
+    x = keras.layers.Conv2DTranspose(max_filter/4, conv_window, strides=2, padding='same', use_bias=False)(x)
+    x = keras.layers.BatchNormalization()(x)
+    x = keras.layers.LeakyReLU(0.2)(x)
+    # Final
+    x = keras.layers.Conv2DTranspose(3, conv_window, strides=1, padding='same', use_bias=False)(x)
     outputs = keras.layers.Activation('tanh')(x)
 ```
 
@@ -39,7 +39,7 @@ The structure of the Discriminator:
 ```python
     inputs = keras.Input(shape=(HEIGHT, WIDTH, CHANNEL))
     # 32x32 -> 16x16
-    x = keras.layers.Conv2D(max_filter/8, conv_window, strides=2, padding='same', use_bias=True)(inputs)
+    x = keras.layers.Conv2D(max_filter/8, conv_window, strides=1, padding='same', use_bias=True)(inputs)
     x = keras.layers.LeakyReLU(0.2)(x)
     # 16x16 -> 8x8
     x = keras.layers.Conv2D(max_filter/4, conv_window, strides=2, padding='same', use_bias=True)(x)
@@ -48,15 +48,16 @@ The structure of the Discriminator:
     x = keras.layers.Conv2D(max_filter/2, conv_window, strides=2, padding='same', use_bias=True)(x)
     x = keras.layers.LeakyReLU(0.2)(x)
     #Final
-    x = keras.layers.Conv2D(max_filter, conv_window, strides=1, padding='valid', use_bias=True)(x)
+    x = keras.layers.Conv2D(max_filter, conv_window, strides=2, padding='same', use_bias=True)(x)
     x = keras.layers.LeakyReLU(0.2)(x)
     x = keras.layers.Flatten()(x)
+    x = keras.layers.Dropout(0.1)(x)
     outputs = keras.layers.Dense(1)(x)
 ```
 ## Results
-After 15000 Epochs of Training
+After 5000 Epochs of Training
 
-<img src="newImages/punks/epoch15000.png" width="50%" height="50%"/>
+<img src="newImages/punks/epoch5000.png" width="50%" height="50%"/>
 
 
 ## Usage
